@@ -7,7 +7,7 @@ fc = 3e3
 T = 1/fc
 
 # Frecuencia de nuestro oscilador
-fs = 100e3
+fs = 55e3
 
 t = np.linspace(0, 1*T, 1000)
 x= np.zeros(len(t))
@@ -25,8 +25,8 @@ for i in range(1,Nmax):
 plt.plot(t,x)
 
 print("Number of harmonics that chan be sampled = " + str(Nmax))
-# Frecuencia maxima de sampleo necesaria para samplear los Nmax armonicos
+# FFrecuencia del armonico mas alto
 max_freq = (2*Nmax-1)*fc/1e3
-print("Min sampling freq needed = " + str(max_freq) + "kHz")
+print("Frequency of the highest harmonic = " + str(max_freq) + "kHz")
 
 plt.show()
