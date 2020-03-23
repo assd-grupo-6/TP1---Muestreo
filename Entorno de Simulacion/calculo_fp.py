@@ -2,14 +2,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
+# Frecuencia central de la cuadrada
 fc = 3e3
 T = 1/fc
 
+# Frecuencia de nuestro oscilador
 fs = 100e3
 
 t = np.linspace(0, 1*T, 1000)
 x= np.zeros(len(t))
-Nmax = int((1/2)*(fs/fc + 1))
+
+# Numero maximo de harmonicos que pueden ser sampleados por la fs
+Nmax = int((1/2)*(fs/(2*fc) + 1))
+
 
 for i in range(1,Nmax):
     xi=[]
@@ -19,10 +24,9 @@ for i in range(1,Nmax):
         x[j] = x[j] + xi[j]
 plt.plot(t,x)
 
-print("Nmax = " + str(Nmax))
+print("Number of harmonics that chan be sampled = " + str(Nmax))
+# Frecuencia maxima de sampleo necesaria para samplear los Nmax armonicos
 max_freq = (2*Nmax-1)*fc/1e3
-print("Max freq = " + str(max_freq) + "kHz")
+print("Min sampling freq needed = " + str(max_freq) + "kHz")
 
 plt.show()
-
-
