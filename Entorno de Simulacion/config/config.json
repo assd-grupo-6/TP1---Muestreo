@@ -1,0 +1,54 @@
+{
+  "aaf-settings": {
+    "type": "butter",
+    "fp": 50.0e3,
+    "ap": 1.0,
+    "fa": 75.0e3,
+    "aa": 41.0,
+    "fs": 1.0e6
+  },
+
+  "recovery-filter-settings": {
+    "type": "butter",
+    "fp": 50.0e3,
+    "ap": 1.0,
+    "fa": 75.0e3,
+    "aa": 41.0,
+    "fs": 1.0e6
+  },
+
+  "sampling-settings": {
+    "mode": "natural",
+    "sample-rate": 150.0e3,
+    "duty-cycle": 0.5
+  },
+
+  "output-settings": {
+    "input-signal": true,
+    "aaf": false,
+    "sample-and-hold": false,
+    "analog-switch": false,
+    "recovery-filter": true
+  },
+
+  "stages-settings": {
+    "aaf": true,
+    "sample-and-hold": true,
+    "analog-switch": true,
+    "recovery-filter": true
+  },
+
+  "input-signal": {
+    "waveform": "square",
+    "freq": 1.0e3,
+    "amplitude": 1.0,
+    "fs": 1.0e6
+  },
+
+  "widgets-parameters": {
+    "input-freq-low": 1.0,
+    "input-freq-high": 2.0e6,
+    "sample-rate-low": 1.0,
+    "sample-rate-high": 500e3
+  }
+}
