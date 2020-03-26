@@ -18,6 +18,9 @@ class AAF:
         self.aa = aaf_config["aa"]
         # sampling freq
         self.fs = aaf_config["fs"]
+
+        np.random.seed(1993123)
+
         self.sos = self.second_order_stages()
 
     def second_order_stages(self):
@@ -31,13 +34,17 @@ class AAF:
 
         return b, a
 
-    def get_numeric_output(self, t, s_in):
+    def t_output(self, input):
         """
         Given an input signal, the output filtered signal is computed
-        :param t: time vector
-        :param s_in: input signal vector
+        :param input: input signal as a dict with fields t and y
         :return: the filtered signal
-        :rtype: list of complex
+        :rtype:  dict
         """
-        filtered = signal.sosfilt(self.sos, s_in)
-        return filtered
+        # TODO: dummy just return a random array
+        t = input["t"]
+        y = np.random.rand(len(t))
+        ret = dict()
+        ret["y"] = y
+        ret["t"] = t
+        return ret

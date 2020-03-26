@@ -109,19 +109,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="inputSignalOut_checkBox">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Input Signal</string>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </item>
              </layout>
@@ -141,7 +128,7 @@
              <layout class="QGridLayout" name="gridLayout_4">
               <item row="0" column="0">
                <layout class="QGridLayout" name="gridLayout_9">
-                <item row="0" column="0">
+                <item row="1" column="0">
                  <widget class="QCheckBox" name="antiAliasOut_checkBox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -155,19 +142,6 @@
                  </widget>
                 </item>
                 <item row="2" column="0">
-                 <widget class="QCheckBox" name="analogSwitchOut_checkBox">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Analog Switch</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
                  <widget class="QCheckBox" name="sampleHoldOut_checkBox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -181,6 +155,19 @@
                  </widget>
                 </item>
                 <item row="3" column="0">
+                 <widget class="QCheckBox" name="analogSwitchOut_checkBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Analog Switch</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
                  <widget class="QCheckBox" name="recovFilterOut_checkBox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -190,6 +177,19 @@
                   </property>
                   <property name="text">
                    <string>Recovery Filter</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="inputSignalOut_checkBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Input Signal</string>
                   </property>
                  </widget>
                 </item>
@@ -451,7 +451,7 @@
        </widget>
       </item>
       <item row="0" column="1" rowspan="2">
-       <layout class="QVBoxLayout" name="figureLayout" stretch="">
+       <layout class="QVBoxLayout" name="figureLayout">
         <property name="sizeConstraint">
          <enum>QLayout::SetMaximumSize</enum>
         </property>
