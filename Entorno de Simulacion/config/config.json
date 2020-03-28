@@ -17,12 +17,6 @@
     "fs": 1.0e6
   },
 
-  "sampling-settings": {
-    "mode": "natural",
-    "sample-rate": 150.0e3,
-    "duty-cycle": 0.5
-  },
-
   "output-settings": {
     "input-signal": true,
     "aaf": false,
@@ -39,10 +33,9 @@
   },
 
   "input-signal": {
-    "waveform": "square",
+    "waveform": "sine",
     "freq": 1.0e3,
-    "amplitude": 1.0,
-    "fs": 1.0e6
+    "amplitude": 1.0
   },
 
   "widgets-parameters": {
@@ -50,5 +43,13 @@
     "input-freq-high": 2.0e6,
     "sample-rate-low": 1.0,
     "sample-rate-high": 500e3
+  },
+
+  "oscillator": {
+    "freq": 60.0e3,
+    "amplitude": 5.0,
+    "duty": 0.5
   }
+
+
 }

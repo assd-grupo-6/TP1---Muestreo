@@ -5,7 +5,7 @@ class AnalogSwitch():
     def __init__(self):
         np.random.seed(12312312)
 
-    def t_output(self, input):
+    def output(self, input):
         """
         Given an input signal, the output filtered signal is computed
         :param input: input signal as a dict with fields t and y

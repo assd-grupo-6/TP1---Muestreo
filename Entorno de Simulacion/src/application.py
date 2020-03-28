@@ -14,6 +14,7 @@ from src.analog_switch import AnalogSwitch
 from src.input_signal import InputSignal
 from src.recov_filter import RecoveryFilter
 from src.sample_hold import SampleAndHold
+from src.oscillator import Oscillator
 
 
 class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
@@ -25,8 +26,8 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.configs = self.get_config()
         self.aaf_settings = self.configs["aaf-settings"]
         self.recovery_filter_settings = self.configs["recovery-filter-settings"]
-        self.sampling_settings = self.configs["sampling-settings"]
         self.output_settings = self.configs["output-settings"]
+        self.oscillator_settings = self.configs["oscillator"]
         self.stages_settings = self.configs["stages-settings"]
         self.input_signal_settings = self.configs["input-signal"]
         self.widgets_settings = self.configs["widgets-parameters"]
@@ -40,6 +41,8 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.analog_switch = AnalogSwitch()
         # Create recovery filter
         self.recovery_filter = RecoveryFilter()
+        # Create Oscillator
+        self.oscillator = Oscillator(self.oscillator_settings)
 
         # Setup Matplotlib
         if find_executable('latex'):
@@ -60,7 +63,9 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.altSinWaveform_RadioButton.waveform = "altsine"
         self.squareWaveform_radioButton.waveform = "square"
         # Define input signal radio buttons 'group'
-        self.input_signal_waveform_radioButtons = [self.sinWave_radioButton, self.altSinWaveform_RadioButton, self.squareWaveform_radioButton]
+        self.input_signal_waveform_radioButtons = [self.sinWave_radioButton,
+                                                   self.altSinWaveform_RadioButton,
+                                                   self.squareWaveform_radioButton]
 
         # nodes signals represented by a dict containing "t", "y"
         # "t" is the time vector
@@ -71,12 +76,16 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.analog_switch_node = dict()
         self.recov_filt_node = dict()
 
+        # TODO: Deberia tener un vector de tiempo global? o lo saco de la input signal?
 
         # Connect widget signals
         self.sinWave_radioButton.toggled.connect(self.update_input_signal)
         self.altSinWaveform_RadioButton.toggled.connect(self.update_input_signal)
         self.squareWaveform_radioButton.toggled.connect(self.update_input_signal)
         self.inputSignalFreq_spinBox.valueChanged.connect(self.update_input_signal)
+
+        self.sampleRat_spinBox.valueChanged.connect(self.update_oscillator)
+        self.sampleCycle_spinBox.valueChanged.connect(self.update_oscillator)
 
         self.inputSignalOut_checkBox.toggled.connect(self.update_plot)
         self.antiAliasOut_checkBox.toggled.connect(self.update_plot)
@@ -90,9 +99,6 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.recovFilterStage_checkBox.toggled.connect(self.stages_changed)
 
         self.update_input_signal()
-
-        # TODO: remove this
-        np.random.seed(19680801)
 
     def transfer_settings_to_GUI(self):
         # Widgets Parameters
@@ -113,14 +119,8 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.inputSignalAmp_spinBox.setValue(self.input_signal_settings["amplitude"])
 
         # Sampling
-        samp_mode = self.sampling_settings["mode"]
-        if samp_mode == "natural":
-            self.naturalSampling_radioButton.setChecked(True)
-        elif samp_mode == "instantaneous":
-            self.instSampling_radioButton.setChecked(True)
-
-        self.sampleRat_spinBox.setValue(self.sampling_settings["sample-rate"])
-        self.sampleCycle_spinBox.setValue(self.sampling_settings["duty-cycle"])
+        self.sampleRat_spinBox.setValue(self.oscillator_settings["freq"])
+        self.sampleCycle_spinBox.setValue(self.oscillator_settings["duty"])
 
         # Stages
         self.antiAliasStage_checkBox.setChecked(self.stages_settings["aaf"])
@@ -144,23 +144,30 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
             data = json.load(config_file)
             return data
 
+    def update_oscillator(self):
+        self.oscillator_settings["freq"] = self.sampleRat_spinBox.value()
+        self.oscillator_settings["duty"] = self.sampleCycle_spinBox.value()
+        self.oscillator = Oscillator(self.oscillator_settings)
+
+        self.update_node_signals()
+
     def update_input_signal(self):
         # get waveform
         for radioButton in self.input_signal_waveform_radioButtons:
             if radioButton.isChecked():
-                waveform = radioButton.waveform
+                self.input_signal_settings["waveform"] = radioButton.waveform
         # get frequency
         freq = self.inputSignalFreq_spinBox.value()
-
-        #get amplitude
-        amplitude = self.inputSignalAmp_spinBox.value()
-
-        self.input_signal_settings["waveform"] = waveform
         self.input_signal_settings["freq"] = freq
+
+        # get amplitude
+        amplitude = self.inputSignalAmp_spinBox.value()
         self.input_signal_settings["amplitude"] = amplitude
 
         self.input_signal = InputSignal(self.input_signal_settings)
-        self.update_node_signals()
+
+        # must update oscillator. this method then calls to update nodes
+        self.update_oscillator()
 
     def update_plot(self):
         # get output nodes settings
@@ -170,22 +177,28 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.output_settings["analog-switch"] = self.analogSwitchOut_checkBox.isChecked()
         self.output_settings["recovery-filter"] = self.recovFilterOut_checkBox.isChecked()
 
-        # TODO: implementar
-        # Dummy plot to test
         self.figure.clf()
         self.figure_canvas.draw()
         self.axes = self.figure.add_subplot(111)
 
+        t = self.in_node["t"]
+
         if self.output_settings["input-signal"] is True:
-            self.axes.plot(self.in_node["y"], label='random plot - input')
+            self.axes.plot(t, self.in_node["y"], label='random plot - input')
         if self.output_settings["aaf"] is True:
             self.axes.plot(self.aaf_node["y"], label='random plot - aaf')
         if self.output_settings["sample-and-hold"] is True:
-            self.axes.plot(self.sample_hold_node["y"], label='random plot - s\&h')
+            self.axes.plot(t, self.sample_hold_node["y"], label='random plot - s\&h')
         if self.output_settings["analog-switch"] is True:
             self.axes.plot(self.analog_switch_node["y"], label='random plot - analog switch')
         if self.output_settings["recovery-filter"] is True:
             self.axes.plot(self.recov_filt_node["y"], label='random plot - recovery filter')
+
+
+        # # TODO: plot oscillator signal to debug
+        t_osc = self.oscillator.get_signal(t)["t"]
+        y_osc = self.oscillator.get_signal(t)["y"]
+        self.axes.plot(t_osc, y_osc, label='oscillator')
 
         self.axes.legend()
         self.figure_canvas.draw()
@@ -199,25 +212,27 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.update_node_signals()
 
     def update_node_signals(self):
-        # t_output method structure to implement.
-        # for now may throw random
+        self.in_node = self.input_signal.get_signal_dict()
+
         if self.stages_settings["aaf"] is True:
-            self.aaf_node = self.aaf.t_output(self.in_node)
+            self.aaf_node = self.aaf.output(self.in_node)
         else:
             self.aaf_node = self.in_node
 
+        t = self.in_node["t"]
+
         if self.stages_settings["sample-and-hold"] is True:
-            self.sample_hold_node = self.sample_and_hold.t_output(self.aaf_node)
+            self.sample_hold_node = self.sample_and_hold.output(self.aaf_node, self.oscillator.get_signal(t))
         else:
             self.sample_hold_node = self.aaf_node
 
         if self.stages_settings["analog-switch"] is True:
-            self.analog_switch_node = self.analog_switch.t_output(self.sample_hold_node)
+            self.analog_switch_node = self.analog_switch.output(self.sample_hold_node)
         else:
             self.analog_switch_node = self.sample_hold_node
 
         if self.stages_settings["recovery-filter"] is True:
-            self.recov_filt_node = self.recovery_filter.t_output(self.analog_switch_node)
+            self.recov_filt_node = self.recovery_filter.output(self.analog_switch_node)
         else:
             self.recov_filt_node = self.analog_switch_node
 
