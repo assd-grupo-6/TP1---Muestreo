@@ -1,4 +1,4 @@
-from src import design, aaf
+from src import design
 import json
 from PyQt5 import QtWidgets, QtGui
 import numpy as np
@@ -10,6 +10,7 @@ from matplotlib.backends.backend_qt5agg import (
 from distutils.spawn import find_executable
 import matplotlib.pyplot as mpl
 
+from src.aaf2 import AntiAlias
 from src.analog_switch import AnalogSwitch
 from src.input_signal import InputSignal
 from src.recov_filter import RecoveryFilter
@@ -31,8 +32,9 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.stages_settings = self.configs["stages-settings"]
         self.input_signal_settings = self.configs["input-signal"]
         self.widgets_settings = self.configs["widgets-parameters"]
+        self.system_settings = self.configs["system-settings"]
         # Create AAF
-        self.aaf = aaf.AAF(self.aaf_settings)
+        self.aaf = AntiAlias(self.aaf_settings)
         # Create input signal
         self.input_signal = InputSignal(self.input_signal_settings)
         # Create Sample & Hold
@@ -186,7 +188,7 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         if self.output_settings["input-signal"] is True:
             self.axes.plot(t, self.in_node["y"], label='random plot - input')
         if self.output_settings["aaf"] is True:
-            self.axes.plot(self.aaf_node["y"], label='random plot - aaf')
+            self.axes.plot(t, self.aaf_node["y"], label='random plot - aaf')
         if self.output_settings["sample-and-hold"] is True:
             self.axes.plot(t, self.sample_hold_node["y"], label='random plot - s\&h')
         if self.output_settings["analog-switch"] is True:
@@ -196,9 +198,7 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
 
         # # TODO: plot oscillator signal to debug
-        t_osc = self.oscillator.get_signal(t)["t"]
-        y_osc = self.oscillator.get_signal(t)["y"]
-        self.axes.plot(t_osc, y_osc, label='oscillator')
+
 
         self.axes.legend()
         self.figure_canvas.draw()
