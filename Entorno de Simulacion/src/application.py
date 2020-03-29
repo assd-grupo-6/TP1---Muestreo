@@ -22,7 +22,7 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         super(Application, self).__init__(parent)
         self.setupUi(self)
         # Parse configuration file
-        self.config_path = "../config/config.json"
+        self.config_path = "config/config.json"
         self.configs = self.get_config()
         self.aaf_settings = self.configs["aaf-settings"]
         self.recovery_filter_settings = self.configs["recovery-filter-settings"]
@@ -227,7 +227,7 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.sample_hold_node = self.aaf_node
 
         if self.stages_settings["analog-switch"] is True:
-            self.analog_switch_node = self.analog_switch.output(self.sample_hold_node)
+            self.analog_switch_node = self.analog_switch.output(self.sample_hold_node, self.oscillator.get_signal(t))
         else:
             self.analog_switch_node = self.sample_hold_node
 

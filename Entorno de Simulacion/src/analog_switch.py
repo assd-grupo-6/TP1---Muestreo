@@ -3,19 +3,27 @@ import numpy as np
 
 class AnalogSwitch():
     def __init__(self):
-        np.random.seed(12312312)
+        self.controlSignal = dict()
 
-    def output(self, input):
+
+
+    def output(self, input, control):
         """
         Given an input signal, the output filtered signal is computed
         :param input: input signal as a dict with fields t and y
+        :param control: control signal as a dict with fields t and y
         :return: the filtered signal
         :rtype:  dict
         """
-        # TODO: dummy just return a random array
-        t = input["t"]
-        y = np.random.rand(len(t))
-        ret = dict()
-        ret["y"] = y
-        ret["t"] = t
-        return ret
+        ti = input["t"]
+        tc = control["t"]
+        if ti.any() == tc.any():
+            ret = dict()
+            if control["y"].any() == 0:
+                ret["y"] = 0
+            else:
+                ret["y"] = input["y"]
+            ret["t"] = ti
+            return ret
+        else:
+            raise ValueError("Analog switch error: signal and control inputs out of sync")
