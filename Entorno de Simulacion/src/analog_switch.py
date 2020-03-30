@@ -18,6 +18,7 @@ class AnalogSwitch():
         ti = input["t"]
         tc = control["t"]
         if ti.any() == tc.any():
+            print(control["y"])
             ret = dict()
             if control["y"].any() == 0:
                 ret["y"] = 0
