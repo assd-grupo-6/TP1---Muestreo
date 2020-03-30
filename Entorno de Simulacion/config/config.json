@@ -1,7 +1,7 @@
 {
   "aaf-settings": {
     "type": "butter",
-    "fp": 50.0e3,
+    "fp": 500.0e3,
     "ap": 1.0,
     "fa": 75.0e3,
     "aa": 41.0,
@@ -33,8 +33,8 @@
   },
 
   "input-signal": {
-    "waveform": "sine",
-    "freq": 1.0e3,
+    "waveform": "square",
+    "freq": 1.004e3,
     "amplitude": 1.0
   },
 
@@ -49,6 +49,11 @@
     "freq": 60.0e3,
     "amplitude": 5.0,
     "duty": 0.5
+  },
+
+  "system-settings":
+  {
+    "n-points": 1000
   }
 
 
