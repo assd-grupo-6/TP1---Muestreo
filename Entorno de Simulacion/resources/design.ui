@@ -34,7 +34,7 @@
         <property name="title">
          <string>Configuration</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
+        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0">
          <property name="sizeConstraint">
           <enum>QLayout::SetMinimumSize</enum>
          </property>
@@ -281,6 +281,13 @@
                 </item>
                </layout>
               </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="updateSampe_pushButton">
+                <property name="text">
+                 <string>Update Sampling Settings</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>
@@ -389,6 +396,16 @@
                 </property>
                </widget>
               </item>
+              <item row="2" column="1">
+               <widget class="QDoubleSpinBox" name="inputSignalAmp_spinBox">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
               <item row="2" column="0">
                <widget class="QLabel" name="label_4">
                 <property name="sizePolicy">
@@ -402,13 +419,10 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="1">
-               <widget class="QDoubleSpinBox" name="inputSignalAmp_spinBox">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
+              <item row="3" column="0" colspan="2">
+               <widget class="QPushButton" name="updateInput_pushButton">
+                <property name="text">
+                 <string>Update Input Signal</string>
                 </property>
                </widget>
               </item>
@@ -416,6 +430,13 @@
             </widget>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QPushButton" name="exportPlots_pushButton">
+           <property name="text">
+            <string>Export Plots</string>
+           </property>
+          </widget>
          </item>
          <item>
           <spacer name="verticalSpacer">
@@ -443,24 +464,6 @@
      </layout>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1044</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuTools">
-    <property name="title">
-     <string>Tools</string>
-    </property>
-    <addaction name="actionConfig_AAF_Settings"/>
-    <addaction name="actionRecovery_Filter_Settings"/>
-   </widget>
-   <addaction name="menuTools"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionConfig_AAF_Settings">

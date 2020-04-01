@@ -1,8 +1,10 @@
+from PyQt5.QtWidgets import QFileDialog
+
 from src import design
 import json
 from PyQt5 import QtWidgets, QtGui
 import numpy as np
-from scipy import signal
+from scipy.fftpack import fft, fftfreq
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
@@ -11,6 +13,7 @@ from distutils.spawn import find_executable
 import matplotlib.pyplot as mpl
 
 from src.aaf2 import AntiAlias
+from src.analog_sw_ctrl_signal import AnalogSwitchCtrlSignal
 from src.analog_switch import AnalogSwitch
 from src.input_signal import InputSignal
 from src.recov_filter import RecoveryFilter
@@ -23,7 +26,7 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         super(Application, self).__init__(parent)
         self.setupUi(self)
         # Parse configuration file
-        self.config_path = "config/config.json"
+        self.config_path = "../config/config.json"
         self.configs = self.get_config()
         self.aaf_settings = self.configs["aaf-settings"]
         self.recovery_filter_settings = self.configs["recovery-filter-settings"]
@@ -45,6 +48,12 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.recovery_filter = RecoveryFilter()
         # Create Oscillator
         self.oscillator = Oscillator(self.oscillator_settings)
+        # Create Analog Switch Control Signal
+        # Same frequency as the oscillator, lower duty cycle
+        self.as_ctrl_signal_settings = dict()
+        self.as_ctrl_signal_settings["freq"] = self.oscillator_settings["freq"]
+        self.as_ctrl_signal_settings["duty"] = self.oscillator_settings["duty"] * self.system_settings["as-ctrl-duty"]
+        self.analog_switch_ctrl_signal = AnalogSwitchCtrlSignal(self.as_ctrl_signal_settings)
 
         # Setup Matplotlib
         if find_executable('latex'):
@@ -56,7 +65,8 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.figure_canvas.setSizePolicy(size_policy)
         self.figureLayout.addWidget(self.figure_canvas)
-        self.axes = self.figure.add_subplot(111)
+        self.time_axes = self.figure.add_subplot(211)
+        self.freq_axes = self.figure.add_subplot(212)
 
         # transfer settings to GUI
         self.transfer_settings_to_GUI()
@@ -84,21 +94,22 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.sinWave_radioButton.toggled.connect(self.update_input_signal)
         self.altSinWaveform_RadioButton.toggled.connect(self.update_input_signal)
         self.squareWaveform_radioButton.toggled.connect(self.update_input_signal)
-        self.inputSignalFreq_spinBox.valueChanged.connect(self.update_input_signal)
+        self.updateInput_pushButton.clicked.connect(self.update_input_signal)
 
-        self.sampleRat_spinBox.valueChanged.connect(self.update_oscillator)
-        self.sampleCycle_spinBox.valueChanged.connect(self.update_oscillator)
+        self.updateSampe_pushButton.clicked.connect(self.update_oscillator)
 
-        self.inputSignalOut_checkBox.toggled.connect(self.update_plot)
-        self.antiAliasOut_checkBox.toggled.connect(self.update_plot)
-        self.sampleHoldOut_checkBox.toggled.connect(self.update_plot)
-        self.analogSwitchOut_checkBox.toggled.connect(self.update_plot)
-        self.recovFilterOut_checkBox.toggled.connect(self.update_plot)
+        self.inputSignalOut_checkBox.toggled.connect(self.update_plots)
+        self.antiAliasOut_checkBox.toggled.connect(self.update_plots)
+        self.sampleHoldOut_checkBox.toggled.connect(self.update_plots)
+        self.analogSwitchOut_checkBox.toggled.connect(self.update_plots)
+        self.recovFilterOut_checkBox.toggled.connect(self.update_plots)
 
         self.antiAliasStage_checkBox.toggled.connect(self.stages_changed)
         self.sampleHoldStage_checkBox.toggled.connect(self.stages_changed)
         self.analogSwitchStage_checkBox.toggled.connect(self.stages_changed)
         self.recovFilterStage_checkBox.toggled.connect(self.stages_changed)
+
+        self.exportPlots_pushButton.clicked.connect(self.export_plots)
 
         self.update_input_signal()
 
@@ -150,6 +161,10 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.oscillator_settings["freq"] = self.sampleRat_spinBox.value()
         self.oscillator_settings["duty"] = self.sampleCycle_spinBox.value()
         self.oscillator = Oscillator(self.oscillator_settings)
+        # Update AS Ctrl Signal
+        self.as_ctrl_signal_settings["freq"] = self.oscillator_settings["freq"]
+        self.as_ctrl_signal_settings["duty"] = self.oscillator_settings["duty"] * self.system_settings["as-ctrl-duty"]
+        self.analog_switch_ctrl_signal = AnalogSwitchCtrlSignal(self.as_ctrl_signal_settings)
 
         self.update_node_signals()
 
@@ -168,10 +183,45 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         self.input_signal = InputSignal(self.input_signal_settings)
 
-        # must update oscillator. this method then calls to update nodes
+        # must update oscillator. this method updates AS Ctrl Signal and then calls to update nodes
         self.update_oscillator()
 
-    def update_plot(self):
+    def update_f_plots(self):
+        if self.output_settings["input-signal"] is True:
+            spectrum = self.get_spectrum(self.in_node)
+            self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Input Signal')
+        if self.output_settings["aaf"] is True:
+            spectrum = self.get_spectrum(self.aaf_node)
+            self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Anti Alias Filter')
+        if self.output_settings["sample-and-hold"] is True:
+            spectrum = self.get_spectrum(self.sample_hold_node)
+            self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Sample \& Hold Signal')
+        if self.output_settings["analog-switch"] is True:
+            spectrum = self.get_spectrum(self.analog_switch_node)
+            self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Analog Switch Signal')
+        if self.output_settings["recovery-filter"] is True:
+            spectrum = self.get_spectrum(self.recov_filt_node)
+            self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Recovery Filter Signal')
+
+        self.freq_axes.legend(loc='upper right')
+
+    def update_t_plot(self):
+        t = self.in_node["t"]
+
+        if self.output_settings["input-signal"] is True:
+            self.time_axes.plot(t, self.in_node["y"], label='Input Signal')
+        if self.output_settings["aaf"] is True:
+            self.time_axes.plot(t, self.aaf_node["y"], label='Anti Alias Filter Signal')
+        if self.output_settings["sample-and-hold"] is True:
+            self.time_axes.plot(t, self.sample_hold_node["y"], label='Sample \& Hold Signal')
+        if self.output_settings["analog-switch"] is True:
+            self.time_axes.plot(t, self.analog_switch_node["y"], label='Analog Switch Signal')
+        if self.output_settings["recovery-filter"] is True:
+            self.time_axes.plot(t, self.recov_filt_node["y"], label='Recovery Filter Signal')
+
+        self.time_axes.legend(loc='upper right')
+
+    def update_plots(self):
         # get output nodes settings
         self.output_settings["input-signal"] = self.inputSignalOut_checkBox.isChecked()
         self.output_settings["aaf"] = self.antiAliasOut_checkBox.isChecked()
@@ -181,27 +231,42 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         self.figure.clf()
         self.figure_canvas.draw()
-        self.axes = self.figure.add_subplot(111)
+        self.time_axes = self.figure.add_subplot(211)
+        self.freq_axes = self.figure.add_subplot(212)
+        self.update_t_plot()
+        self.update_f_plots()
 
-        t = self.in_node["t"]
+        self.time_axes.grid('minor')
+        self.time_axes.set_title("Time Domain")
+        self.time_axes.set_xlabel("Time [sec]")
+        self.time_axes.set_ylabel("Amplitude [V]")
 
-        if self.output_settings["input-signal"] is True:
-            self.axes.plot(t, self.in_node["y"], label='random plot - input')
-        if self.output_settings["aaf"] is True:
-            self.axes.plot(t, self.aaf_node["y"], label='random plot - aaf')
-        if self.output_settings["sample-and-hold"] is True:
-            self.axes.plot(t, self.sample_hold_node["y"], label='random plot - s\&h')
-        if self.output_settings["analog-switch"] is True:
-            self.axes.plot(self.analog_switch_node["y"], label='random plot - analog switch')
-        if self.output_settings["recovery-filter"] is True:
-            self.axes.plot(self.recov_filt_node["y"], label='random plot - recovery filter')
-
-
-        # # TODO: plot oscillator signal to debug
-
-
-        self.axes.legend()
+        self.freq_axes.grid('minor')
+        self.freq_axes.set_title("Frequency Domain")
+        self.freq_axes.set_xlabel("Frequency [Hz]")
+        self.freq_axes.set_ylabel("Mag")
         self.figure_canvas.draw()
+
+    def get_spectrum(self, input_signal, bilateral=False):
+        y = input_signal["y"]
+        t = input_signal["t"]
+        signal_fft = fft(y, n=10000)
+        # signal power spectral density
+        signal_psd = np.abs(signal_fft)
+        # get frequencies corresponding to psd
+        dt = t[1] - t[0]
+        f = fftfreq(len(signal_psd), dt)
+        # get positive half of frequencies
+        i = f > 0
+
+        ret = dict()
+        if bilateral:
+            ret["psd"] = signal_psd
+            ret["f"] = f
+        else:
+            ret["psd"] = signal_psd[i] / 10000
+            ret["f"] = f[i]
+        return ret
 
     def stages_changed(self):
         self.stages_settings["aaf"] = self.antiAliasStage_checkBox.isChecked()
@@ -222,7 +287,8 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         t = self.in_node["t"]
 
         if self.stages_settings["sample-and-hold"] is True:
-            self.sample_hold_node = self.sample_and_hold.output(self.aaf_node, self.oscillator.get_signal(t))
+            self.sample_hold_node = self.sample_and_hold.output(self.aaf_node,
+                                                                self.analog_switch_ctrl_signal.get_signal(t))
         else:
             self.sample_hold_node = self.aaf_node
 
@@ -232,8 +298,17 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.analog_switch_node = self.sample_hold_node
 
         if self.stages_settings["recovery-filter"] is True:
-            self.recov_filt_node = self.recovery_filter.output(self.analog_switch_node)
+            # TODO: Test recovery filter same as aaf. Change
+            self.recov_filt_node = self.aaf.output(self.analog_switch_node)
         else:
             self.recov_filt_node = self.analog_switch_node
 
-        self.update_plot()
+        self.update_plots()
+
+    def export_plots(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_name, _ = QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()",
+                                                   "", "PDF (*.pdf);;All Files (*)", options=options)
+        if file_name:
+            self.figure.savefig(file_name + '.pdf', bbox_inches='tight')

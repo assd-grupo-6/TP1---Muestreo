@@ -1,30 +1,31 @@
 import numpy as np
 
 
-class AnalogSwitch():
+class AnalogSwitch:
     def __init__(self):
         self.controlSignal = dict()
 
-
-
-    def output(self, input, control):
+    def output(self, input_signal, control):
         """
-        Given an input signal, the output filtered signal is computed
-        :param input: input signal as a dict with fields t and y
-        :param control: control signal as a dict with fields t and y
-        :return: the filtered signal
-        :rtype:  dict
+        Computes the Analog Switch output given an input signal and the control signal
+        :param input_signal: data to be switched
+        :param control: control signal. Square signal
+        :return: returns the output signal in a dictionary format
+        :rtype: dict
         """
-        ti = input["t"]
-        tc = control["t"]
-        if ti.any() == tc.any():
-            print(control["y"])
-            ret = dict()
-            if control["y"].any() == 0:
-                ret["y"] = 0
+        # Assumes input_signal and control have the same length
+        t = input_signal["t"]
+        sc = control["y"]
+        x = input_signal["y"]
+        y = []
+        for i in range(0, len(t)):
+            if sc[i] == 1:
+                y.append(x[i])
             else:
-                ret["y"] = input["y"]
-            ret["t"] = ti
-            return ret
-        else:
-            raise ValueError("Analog switch error: signal and control inputs out of sync")
+                y.append(0)
+
+        ret = dict()
+        ret["t"] = t
+        ret["y"] = y
+        return ret
+
