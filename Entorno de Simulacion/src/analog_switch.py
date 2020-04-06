@@ -19,7 +19,7 @@ class AnalogSwitch:
         x = input_signal["y"]
         y = []
         for i in range(0, len(t)):
-            if sc[i] == 1:
+            if sc[i] == 0:
                 y.append(x[i])
             else:
                 y.append(0)

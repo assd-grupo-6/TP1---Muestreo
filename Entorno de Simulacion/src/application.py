@@ -45,7 +45,7 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         # Create Analog Switch
         self.analog_switch = AnalogSwitch()
         # Create recovery filter
-        self.recovery_filter = RecoveryFilter()
+        self.recovery_filter = RecoveryFilter(self.recovery_filter_settings)
         # Create Oscillator
         self.oscillator = Oscillator(self.oscillator_settings)
         # Create Analog Switch Control Signal
@@ -298,7 +298,6 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.analog_switch_node = self.sample_hold_node
 
         if self.stages_settings["recovery-filter"] is True:
-            # TODO: Test recovery filter same as aaf. Change
             self.recov_filt_node = self.aaf.output(self.analog_switch_node)
         else:
             self.recov_filt_node = self.analog_switch_node

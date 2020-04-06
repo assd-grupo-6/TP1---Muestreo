@@ -33,7 +33,7 @@
   },
 
   "input-signal": {
-    "waveform": "square",
+    "waveform": "sine",
     "freq": 3.0e3,
     "amplitude": 1.0
   },
@@ -46,7 +46,7 @@
   },
 
   "oscillator": {
-    "freq": 60.0e3,
+    "freq": 78.0e3,
     "amplitude": 5.0,
     "duty": 0.5
   },
@@ -54,6 +54,6 @@
   "system-settings":
   {
     "n-points": 1000,
-    "as-ctrl-duty": 0.5
+    "as-ctrl-duty": 0.8
   }
 }
