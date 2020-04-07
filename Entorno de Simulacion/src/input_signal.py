@@ -31,6 +31,15 @@ class InputSignal:
             for i in range(0, 10):
                 for element in y_i:
                     self.y.append(element)
+        elif self.waveform == "Xc":
+            fm = 0.2 * self.fc
+            fp = 2 * self.fc
+            m = 0.5
+            period = 1/fm
+            self.t = np.linspace(0, 4*period, 1000)
+            ym = np.cos(2*np.pi*fm*self.t)
+            yp = np.cos(2*np.pi*fp*self.t)
+            self.y = (m * ym + 1)*yp
 
     def get_signal_dict(self):
         ret_dict = dict()

@@ -36,6 +36,9 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.input_signal_settings = self.configs["input-signal"]
         self.widgets_settings = self.configs["widgets-parameters"]
         self.system_settings = self.configs["system-settings"]
+
+        self.simulation = self.system_settings["simulation"]
+
         # Create AAF
         self.aaf = AntiAlias(self.aaf_settings)
         # Create input signal
@@ -74,10 +77,12 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.sinWave_radioButton.waveform = "sine"
         self.altSinWaveform_RadioButton.waveform = "altsine"
         self.squareWaveform_radioButton.waveform = "square"
+        self.XcWaveform_radioButton.waveform = "Xc"
         # Define input signal radio buttons 'group'
         self.input_signal_waveform_radioButtons = [self.sinWave_radioButton,
                                                    self.altSinWaveform_RadioButton,
-                                                   self.squareWaveform_radioButton]
+                                                   self.squareWaveform_radioButton,
+                                                   self.XcWaveform_radioButton]
 
         # nodes signals represented by a dict containing "t", "y"
         # "t" is the time vector
@@ -94,15 +99,21 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.sinWave_radioButton.toggled.connect(self.update_input_signal)
         self.altSinWaveform_RadioButton.toggled.connect(self.update_input_signal)
         self.squareWaveform_radioButton.toggled.connect(self.update_input_signal)
+        self.XcWaveform_radioButton.toggled.connect(self.update_input_signal)
         self.updateInput_pushButton.clicked.connect(self.update_input_signal)
 
         self.updateSampe_pushButton.clicked.connect(self.update_oscillator)
 
-        self.inputSignalOut_checkBox.toggled.connect(self.update_plots)
-        self.antiAliasOut_checkBox.toggled.connect(self.update_plots)
-        self.sampleHoldOut_checkBox.toggled.connect(self.update_plots)
-        self.analogSwitchOut_checkBox.toggled.connect(self.update_plots)
-        self.recovFilterOut_checkBox.toggled.connect(self.update_plots)
+        self.inputSignalOut_t_checkBox.toggled.connect(self.update_plots)
+        self.antiAliasOut_t_checkBox.toggled.connect(self.update_plots)
+        self.sampleHoldOut_t_checkBox.toggled.connect(self.update_plots)
+        self.analogSwitchOut_t_checkBox.toggled.connect(self.update_plots)
+        self.recovFilterOut_t_checkBox.toggled.connect(self.update_plots)
+        self.inputSignalOut_f_checkBox.toggled.connect(self.update_plots)
+        self.antiAliasOut_f_checkBox.toggled.connect(self.update_plots)
+        self.sampleHoldOut_f_checkBox.toggled.connect(self.update_plots)
+        self.analogSwitchOut_f_checkBox.toggled.connect(self.update_plots)
+        self.recovFilterOut_f_checkBox.toggled.connect(self.update_plots)
 
         self.antiAliasStage_checkBox.toggled.connect(self.stages_changed)
         self.sampleHoldStage_checkBox.toggled.connect(self.stages_changed)
@@ -128,6 +139,8 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.altSinWaveform_RadioButton.setChecked(True)
         elif waveform == "square":
             self.squareWaveform_radioButton.setChecked(True)
+        elif waveform == "Xc":
+            self.XcWaveform_radioButton.setChecked(True)
         self.inputSignalFreq_spinBox.setValue(self.input_signal_settings["freq"])
         self.inputSignalAmp_spinBox.setValue(self.input_signal_settings["amplitude"])
 
@@ -142,11 +155,16 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.recovFilterStage_checkBox.setChecked(self.stages_settings["recovery-filter"])
 
         # Outputs
-        self.inputSignalOut_checkBox.setChecked(self.output_settings["input-signal"])
-        self.antiAliasOut_checkBox.setChecked(self.output_settings["aaf"])
-        self.sampleHoldOut_checkBox.setChecked(self.output_settings["sample-and-hold"])
-        self.analogSwitchOut_checkBox.setChecked(self.output_settings["analog-switch"])
-        self.recovFilterOut_checkBox.setChecked(self.output_settings["recovery-filter"])
+        self.inputSignalOut_t_checkBox.setChecked(self.output_settings["input-signal"])
+        self.antiAliasOut_t_checkBox.setChecked(self.output_settings["aaf"])
+        self.sampleHoldOut_t_checkBox.setChecked(self.output_settings["sample-and-hold"])
+        self.analogSwitchOut_t_checkBox.setChecked(self.output_settings["analog-switch"])
+        self.recovFilterOut_t_checkBox.setChecked(self.output_settings["recovery-filter"])
+        self.inputSignalOut_f_checkBox.setChecked(self.output_settings["input-signal-f"])
+        self.antiAliasOut_f_checkBox.setChecked(self.output_settings["aaf-f"])
+        self.sampleHoldOut_f_checkBox.setChecked(self.output_settings["sample-and-hold-f"])
+        self.analogSwitchOut_f_checkBox.setChecked(self.output_settings["analog-switch-f"])
+        self.recovFilterOut_f_checkBox.setChecked(self.output_settings["recovery-filter-f"])
 
     def get_config(self):
         """
@@ -187,22 +205,45 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.update_oscillator()
 
     def update_f_plots(self):
-        if self.output_settings["input-signal"] is True:
+        # TODO: Para la AM plotear en log o en lineal?
+        if self.output_settings["input-signal-f"] is True:
             spectrum = self.get_spectrum(self.in_node)
-            self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Input Signal')
-        if self.output_settings["aaf"] is True:
+            self.freq_axes.plot(spectrum["f"], spectrum["psd"], label='Input Signal')
+            #self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Input Signal')
+        if self.output_settings["aaf-f"] is True:
             spectrum = self.get_spectrum(self.aaf_node)
-            self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Anti Alias Filter')
-        if self.output_settings["sample-and-hold"] is True:
+            self.freq_axes.plot(spectrum["f"], spectrum["psd"], label='Anti Alias Filter')
+            # self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Anti Alias Filter')
+        if self.output_settings["sample-and-hold-f"] is True:
             spectrum = self.get_spectrum(self.sample_hold_node)
-            self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Sample \& Hold Signal')
-        if self.output_settings["analog-switch"] is True:
+            self.freq_axes.plot(spectrum["f"], spectrum["psd"], label='Sample \& Hold Signal')
+            # self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Sample \& Hold Signal')
+        if self.output_settings["analog-switch-f"] is True:
             spectrum = self.get_spectrum(self.analog_switch_node)
-            self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Analog Switch Signal')
-        if self.output_settings["recovery-filter"] is True:
+            self.freq_axes.plot(spectrum["f"], spectrum["psd"], label='Analog Switch Signal')
+            # self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Analog Switch Signal')
+        if self.output_settings["recovery-filter-f"] is True:
             spectrum = self.get_spectrum(self.recov_filt_node)
-            self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Recovery Filter Signal')
-
+            self.freq_axes.plot(spectrum["f"], spectrum["psd"], label='Recovery Filter Signal')
+            # self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Recovery Filter Signal')
+        # TODO: for AM freq plot
+        if self.XcWaveform_radioButton.isChecked() and self.simulation:
+            fs = self.sampleRat_spinBox.value()
+            fin = self.inputSignalFreq_spinBox.value()
+            fc = 2 * fin
+            B = 0.2 * fin
+            right = (2 * fs - 0.2 * fin)
+            self.freq_axes.set_xlim(0, right)
+            lims = self.freq_axes.get_ylim()
+            # pinto espectro original
+            self.freq_axes.fill_betweenx(lims, fc - 1.5*B, fc + 1.5*B, color='blue', alpha=0.2,
+                                         label='Original Spectrum')
+            # pinto la repeticiones
+            self.freq_axes.fill_betweenx(lims, fs/2 - 1.5*2*B, fs/2 , color='green', alpha=0.3,
+                                         label='$1^{st}$ Repetition')
+            self.freq_axes.fill_betweenx(lims, fs/2, fs/2 + 1.5*2*B, color='orange', alpha=0.3,
+                                         label='$2^{nd}$ Repetition')
+            #self.freq_axes.fill_betweenx(lims, 5/2 * fs, 7/2 * fs, color='red', alpha=0.3)
         self.freq_axes.legend(loc='upper right')
 
     def update_t_plot(self):
@@ -222,12 +263,18 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.time_axes.legend(loc='upper right')
 
     def update_plots(self):
-        # get output nodes settings
-        self.output_settings["input-signal"] = self.inputSignalOut_checkBox.isChecked()
-        self.output_settings["aaf"] = self.antiAliasOut_checkBox.isChecked()
-        self.output_settings["sample-and-hold"] = self.sampleHoldOut_checkBox.isChecked()
-        self.output_settings["analog-switch"] = self.analogSwitchOut_checkBox.isChecked()
-        self.output_settings["recovery-filter"] = self.recovFilterOut_checkBox.isChecked()
+        # get time output nodes settings
+        self.output_settings["input-signal"] = self.inputSignalOut_t_checkBox.isChecked()
+        self.output_settings["aaf"] = self.antiAliasOut_t_checkBox.isChecked()
+        self.output_settings["sample-and-hold"] = self.sampleHoldOut_t_checkBox.isChecked()
+        self.output_settings["analog-switch"] = self.analogSwitchOut_t_checkBox.isChecked()
+        self.output_settings["recovery-filter"] = self.recovFilterOut_t_checkBox.isChecked()
+        # get freq output nodes
+        self.output_settings["input-signal-f"] = self.inputSignalOut_f_checkBox.isChecked()
+        self.output_settings["aaf-f"] = self.antiAliasOut_f_checkBox.isChecked()
+        self.output_settings["sample-and-hold-f"] = self.sampleHoldOut_f_checkBox.isChecked()
+        self.output_settings["analog-switch-f"] = self.analogSwitchOut_f_checkBox.isChecked()
+        self.output_settings["recovery-filter-f"] = self.recovFilterOut_f_checkBox.isChecked()
 
         self.figure.clf()
         self.figure_canvas.draw()
@@ -250,9 +297,9 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def get_spectrum(self, input_signal, bilateral=False):
         y = input_signal["y"]
         t = input_signal["t"]
-        signal_fft = fft(y, n=10000)
+        signal_fft = fft(y, n=100000)
         # signal power spectral density
-        signal_psd = np.abs(signal_fft)
+        signal_psd = 20 * np.log(np.abs(signal_fft))
         # get frequencies corresponding to psd
         dt = t[1] - t[0]
         f = fftfreq(len(signal_psd), dt)
@@ -264,7 +311,7 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
             ret["psd"] = signal_psd
             ret["f"] = f
         else:
-            ret["psd"] = signal_psd[i] / 10000
+            ret["psd"] = signal_psd[i]
             ret["f"] = f[i]
         return ret
 

@@ -21,20 +21,25 @@
     "input-signal": true,
     "aaf": false,
     "sample-and-hold": false,
-    "analog-switch": false,
-    "recovery-filter": true
+    "analog-switch": true,
+    "recovery-filter": false,
+    "input-signal-f": false,
+    "aaf-f": false,
+    "sample-and-hold-f": false,
+    "analog-switch-f": true,
+    "recovery-filter-f": false
   },
 
   "stages-settings": {
-    "aaf": true,
+    "aaf": false,
     "sample-and-hold": true,
     "analog-switch": true,
-    "recovery-filter": true
+    "recovery-filter": false
   },
 
   "input-signal": {
-    "waveform": "sine",
-    "freq": 3.0e3,
+    "waveform": "Xc",
+    "freq": 24.0e3,
     "amplitude": 1.0
   },
 
@@ -46,14 +51,15 @@
   },
 
   "oscillator": {
-    "freq": 78.0e3,
+    "freq": 35.2e3,
     "amplitude": 5.0,
-    "duty": 0.5
+    "duty": 0.05
   },
 
   "system-settings":
   {
     "n-points": 1000,
-    "as-ctrl-duty": 0.8
+    "as-ctrl-duty": 1,
+    "simulation": false
   }
 }

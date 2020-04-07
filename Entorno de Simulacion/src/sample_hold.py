@@ -18,7 +18,7 @@ class SampleAndHold:
             a = digitalClockInput["y"]
             b = analogInput["y"]
             for i in range(len(a)):
-                if a[i] != 0:
+                if a[i] != 1:
                     out.append(b[i])
                     self.preValue = b[i]
                 else:
