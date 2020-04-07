@@ -1,0 +1,64 @@
+Removed Member From Class: ClassName=Components Class 1 Member=C1_Celda B
+Removed Member From Class: ClassName=Components Class 1 Member=C1_Celda C
+Removed Member From Class: ClassName=Components Class 1 Member=C1_Celda D
+Removed Member From Class: ClassName=Components Class 1 Member=C2_Celda B
+Removed Member From Class: ClassName=Components Class 1 Member=C2_Celda C
+Removed Member From Class: ClassName=Components Class 1 Member=C2_Celda D
+Removed Member From Class: ClassName=Components Class 1 Member=R1_Celda B
+Removed Member From Class: ClassName=Components Class 1 Member=R1_Celda C
+Removed Member From Class: ClassName=Components Class 1 Member=R1_Celda D
+Removed Member From Class: ClassName=Components Class 1 Member=R2_Celda B
+Removed Member From Class: ClassName=Components Class 1 Member=R2_Celda C
+Removed Member From Class: ClassName=Components Class 1 Member=R2_Celda D
+Removed Member From Class: ClassName=Components Class 1 Member=R3_Celda B
+Removed Member From Class: ClassName=Components Class 1 Member=R3_Celda C
+Removed Member From Class: ClassName=Components Class 1 Member=R3_Celda D
+Removed Member From Class: ClassName=Components Class 1 Member=R4_Celda B
+Removed Member From Class: ClassName=Components Class 1 Member=R4_Celda C
+Removed Member From Class: ClassName=Components Class 1 Member=R4_Celda D
+Removed Member From Class: ClassName=Components Class 1 Member=R5_Celda B
+Removed Member From Class: ClassName=Components Class 1 Member=R5_Celda C
+Removed Member From Class: ClassName=Components Class 1 Member=R5_Celda D
+Removed Member From Class: ClassName=Components Class 1 Member=R6_Celda B
+Removed Member From Class: ClassName=Components Class 1 Member=R6_Celda C
+Removed Member From Class: ClassName=Components Class 1 Member=R6_Celda D
+Removed Member From Class: ClassName=Components Class 1 Member=R7_Celda B
+Removed Member From Class: ClassName=Components Class 1 Member=R7_Celda C
+Removed Member From Class: ClassName=Components Class 1 Member=R7_Celda D
+Change Net Name : Old Net Name=GND New Net Name=Ground
+Change Net Name : Old Net Name=VCC New Net Name=NetCdes1_1
+Change Net Name : Old Net Name=VEE New Net Name=NetCdes2_2
+Added Pin To Net: NetName=NetR17_1 Pin=R17-1
+Added Net: Name=NetR17_1
+Change Class Name : Old Net Name=Components Class 1 New Net Name=FAA
+Added Member To Class: ClassName=Celda B Member=Component C1_Celda B (C1) CAP
+Added Member To Class: ClassName=Celda C Member=Component C1_Celda C (C1) CAP
+Added Member To Class: ClassName=Celda D Member=Component C1_Celda D (C1) CAP
+Added Member To Class: ClassName=Celda B Member=Component C2_Celda B (C2) CAP
+Added Member To Class: ClassName=Celda C Member=Component C2_Celda C (C2) CAP
+Added Member To Class: ClassName=Celda D Member=Component C2_Celda D (C2) CAP
+Added Member To Class: ClassName=Celda B Member=Component R1_Celda B (R1) RES
+Added Member To Class: ClassName=Celda C Member=Component R1_Celda C (R1) RES
+Added Member To Class: ClassName=Celda D Member=Component R1_Celda D (R1) RES
+Added Member To Class: ClassName=Celda B Member=Component R2_Celda B (R2) RES
+Added Member To Class: ClassName=Celda C Member=Component R2_Celda C (R2) RES
+Added Member To Class: ClassName=Celda D Member=Component R2_Celda D (R2) RES
+Added Member To Class: ClassName=Celda B Member=Component R3_Celda B (R3) RES
+Added Member To Class: ClassName=Celda C Member=Component R3_Celda C (R3) RES
+Added Member To Class: ClassName=Celda D Member=Component R3_Celda D (R3) RES
+Added Member To Class: ClassName=Celda B Member=Component R4_Celda B (R4) RES
+Added Member To Class: ClassName=Celda C Member=Component R4_Celda C (R4) RES
+Added Member To Class: ClassName=Celda D Member=Component R4_Celda D (R4) RES
+Added Member To Class: ClassName=Celda B Member=Component R5_Celda B (R5) RES
+Added Member To Class: ClassName=Celda C Member=Component R5_Celda C (R5) RES
+Added Member To Class: ClassName=Celda D Member=Component R5_Celda D (R5) RES
+Added Member To Class: ClassName=Celda B Member=Component R6_Celda B (R6) RES
+Added Member To Class: ClassName=Celda C Member=Component R6_Celda C (R6) RES
+Added Member To Class: ClassName=Celda D Member=Component R6_Celda D (R6) RES
+Added Member To Class: ClassName=Celda B Member=Component R7_Celda B (R7) RES
+Added Member To Class: ClassName=Celda C Member=Component R7_Celda C (R7) RES
+Added Member To Class: ClassName=Celda D Member=Component R7_Celda D (R7) RES
+Added Room: Name=Celda B
+Added Room: Name=Celda C
+Added Room: Name=Celda D
+Added Room: Name=FAA

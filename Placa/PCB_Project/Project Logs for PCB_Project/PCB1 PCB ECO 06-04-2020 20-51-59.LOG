@@ -1,0 +1,113 @@
+Added Component: Designator=C9(CAP100)
+Add component. Clean all parameters for all variants
+Added Component: Designator=J1(JUMPER2)
+Add component. Clean all parameters for all variants
+Added Component: Designator=J2(JUMPER2)
+Add component. Clean all parameters for all variants
+Added Component: Designator=J3(JUMPER2)
+Add component. Clean all parameters for all variants
+Added Component: Designator=U7(P8)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Manufacturer_Part_Number"; Value = "lf398-n_p_8"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "RefDes"; Value = "RefDes"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Type"; Value = "Type"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "Value"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Vendor"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Added Component: Designator=U8(D16)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Datasheet_URL"; Value = "http://www.ti.com/lit/gpn/CD4051B"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "FAMILY_NAME"; Value = "ANALOG SWITCH/MULTIPLEXER (greater than 5V)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "GENERIC_PART_NUMBER"; Value = "CD4051B"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "INDUSTRY_STD_PKG_TYPE"; Value = "SOIC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PACKAGE_DESIGNATOR"; Value = "D"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PIN_COUNT"; Value = "16"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "RefDes"; Value = "RefDes"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Type"; Value = "Type"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "Value"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=Ground_FAA Pin=C2_Celda B2-2
+Added Pin To Net: NetName=Ground_FAA Pin=C2_Celda C2-2
+Added Pin To Net: NetName=Ground_FAA Pin=C2_Celda D2-2
+Added Pin To Net: NetName=Ground_FAA Pin=C9-1
+Added Pin To Net: NetName=NetC1_Celda B2_2 Pin=J2-2
+Added Pin To Net: NetName=Ground_FAA Pin=J3-2
+Added Pin To Net: NetName=Ground_FAA Pin=R7_Celda B2-1
+Added Pin To Net: NetName=Ground_FAA Pin=R7_Celda C2-1
+Added Pin To Net: NetName=Ground_FAA Pin=R7_Celda D2-1
+Added Pin To Net: NetName=Ground_FAA Pin=U1_FR-12
+Added Pin To Net: NetName=Ground_FAA Pin=U2_FR-3
+Added Pin To Net: NetName=Ground_FAA Pin=U2_FR-5
+Added Pin To Net: NetName=Ground_FAA Pin=U2_FR-10
+Added Pin To Net: NetName=NetC1_Celda B1_2 Pin=U7-3
+Added Pin To Net: NetName=Ground_FAA Pin=U8-6
+Added Pin To Net: NetName=Ground_FAA Pin=U8-8
+Added Pin To Net: NetName=Ground_FAA Pin=U8-9
+Added Pin To Net: NetName=Ground_FAA Pin=U8-10
+Added Pin To Net: NetName=NetR17_FR_1 Pin=U8-14
+Added Pin To Net: NetName=+5V Pin=J3-1
+Added Pin To Net: NetName=+5V Pin=U7-8
+Added Net: Name=+5V
+Added Pin To Net: NetName=+rail2_FAA Pin=Cdes4_FAA-1
+Added Pin To Net: NetName=+rail2_FAA Pin=U2_FAA-4
+Added Net: Name=+rail2_FAA
+Added Pin To Net: NetName=+rail2_FR Pin=Cdes4_FR-1
+Added Pin To Net: NetName=+rail2_FR Pin=U2_FR-4
+Added Net: Name=+rail2_FR
+Added Pin To Net: NetName=+rail_FAA Pin=Cdes1_FAA-2
+Added Pin To Net: NetName=+rail_FAA Pin=U1_FAA-4
+Added Net: Name=+rail_FAA
+Added Pin To Net: NetName=+rail_FR Pin=Cdes1_FR-2
+Added Pin To Net: NetName=+rail_FR Pin=U1_FR-4
+Added Net: Name=+rail_FR
+Added Pin To Net: NetName=-rail2_FAA Pin=Cdes3_FAA-2
+Added Pin To Net: NetName=-rail2_FAA Pin=U2_FAA-11
+Added Net: Name=-rail2_FAA
+Added Pin To Net: NetName=-rail2_FR Pin=Cdes3_FR-2
+Added Pin To Net: NetName=-rail2_FR Pin=U2_FR-11
+Added Net: Name=-rail2_FR
+Added Pin To Net: NetName=-rail_FAA Pin=Cdes2_FAA-1
+Added Pin To Net: NetName=-rail_FAA Pin=U1_FAA-11
+Added Net: Name=-rail_FAA
+Added Pin To Net: NetName=-rail_FR Pin=Cdes2_FR-1
+Added Pin To Net: NetName=-rail_FR Pin=U1_FR-11
+Added Net: Name=-rail_FR
+Added Pin To Net: NetName=NetC9_2 Pin=C9-2
+Added Pin To Net: NetName=NetC9_2 Pin=U7-6
+Added Net: Name=NetC9_2
+Added Pin To Net: NetName=NetJ2_1 Pin=J2-1
+Added Pin To Net: NetName=NetJ2_1 Pin=R17_FAA-1
+Added Net: Name=NetJ2_1
+Added Pin To Net: NetName=NetU7_5 Pin=U7-5
+Added Pin To Net: NetName=NetU7_5 Pin=U8-3
+Added Net: Name=NetU7_5
+Added Pin To Net: NetName=NetU7_7 Pin=U7-7
+Added Net: Name=NetU7_7
+Added Pin To Net: NetName=NetU8_11 Pin=U8-11
+Added Net: Name=NetU8_11
+Added Pin To Net: NetName=VCC Pin=Cdes1_FAA-1
+Added Pin To Net: NetName=VCC Pin=Cdes1_FR-1
+Added Pin To Net: NetName=VCC Pin=Cdes4_FAA-2
+Added Pin To Net: NetName=VCC Pin=Cdes4_FR-2
+Added Pin To Net: NetName=VCC Pin=J1-1
+Added Pin To Net: NetName=VCC Pin=U7-1
+Added Pin To Net: NetName=VCC Pin=U8-16
+Added Net: Name=VCC
+Added Pin To Net: NetName=VEE Pin=Cdes2_FAA-2
+Added Pin To Net: NetName=VEE Pin=Cdes2_FR-2
+Added Pin To Net: NetName=VEE Pin=Cdes3_FAA-1
+Added Pin To Net: NetName=VEE Pin=Cdes3_FR-1
+Added Pin To Net: NetName=VEE Pin=J1-2
+Added Pin To Net: NetName=VEE Pin=U7-4
+Added Pin To Net: NetName=VEE Pin=U8-7
+Added Net: Name=VEE
+Added Class: Name=Circuito
+Added Member To Class: ClassName=FR Member=Component Cdes1_FR (Cdes1) CAP
+Added Room: Name=Celda B1
+Added Room: Name=Celda B2
+Added Room: Name=Celda C1
+Added Room: Name=Celda C2
+Added Room: Name=Celda D1
+Added Room: Name=Celda D2
+Added Room: Name=Circuito
+Added Room: Name=FAA
+Added Room: Name=FR
