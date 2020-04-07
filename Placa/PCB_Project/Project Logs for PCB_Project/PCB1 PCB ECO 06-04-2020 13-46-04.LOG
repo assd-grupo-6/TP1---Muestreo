@@ -1,0 +1,6 @@
+Added Component: Designator=J1(JUMPER2)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=VEE Pin=J1-1
+Added Pin To Net: NetName=VCC Pin=J1-2
+Added Member To Class: ClassName=Celda C Member=Component C1_Celda C (C1) CAP
+Added Member To Class: ClassName=Sheet1 Member=Component J1 JUMPER
