@@ -36,10 +36,11 @@ class InputSignal:
             fp = 2 * self.fc
             m = 0.5
             period = 1/fm
-            self.t = np.linspace(0, 4*period, 1000)
+            self.t = np.linspace(0, period, 1000)
             ym = np.cos(2*np.pi*fm*self.t)
             yp = np.cos(2*np.pi*fp*self.t)
-            self.y = self.amplitude * (m * ym + 1)*yp
+            self.y = np.cos(2*np.pi*1.8*fp*self.t) + 2*np.cos(2*np.pi*2*fp*self.t) + np.cos(2*np.pi*2.2*fp*self.t)
+            # self.y = self.amplitude * (m * ym + 1)*yp
 
     def get_signal_dict(self):
         ret_dict = dict()
