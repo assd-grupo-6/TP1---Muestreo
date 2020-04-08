@@ -39,7 +39,7 @@
 
   "input-signal": {
     "waveform": "Xc",
-    "freq": 24.0e3,
+    "freq": 3.0e3,
     "amplitude": 1.0
   },
 

@@ -1,0 +1,59 @@
+Circuit: * C:\Users\lisan\Documents\Repositorios\ASSD\TP1---Muestreo\Ex8\Spice\esquematico_a.asc
+
+WARNING: Node NC_01 is floating.
+
+WARNING: Less than two connections to node NC_01.  This node is used by G:U4:1.
+Direct Newton iteration failed to find .op point.  (Use ".option noopiter" to skip.)
+Starting Gmin stepping
+Gmin = 10
+vernier = 0.5
+Gmin = 1.67772
+vernier = 0.25
+vernier = 0.125
+vernier = 0.0625
+vernier = 0.03125
+Gmin = 1.55474
+vernier = 0.015625
+vernier = 0.0078125
+vernier = 0.00390625
+Gmin = 1.53369
+vernier = 0.00195313
+vernier = 0.000976563
+vernier = 0.000488281
+Gmin = 0
+Gmin stepping succeeded in finding the operating point.
+
+Ignoring empty pin current: Ix(u2:1)
+Ignoring empty pin current: Ix(u2:2)
+Ignoring empty pin current: Ix(u3:1)
+Ignoring empty pin current: Ix(u3:2)
+Ignoring empty pin current: Ix(u4:1)
+Ignoring empty pin current: Ix(u4:2)
+Ignoring empty pin current: Ix(u5:1)
+Ignoring empty pin current: Ix(u5:2)
+Ignoring empty pin current: Ix(u2:1)
+Ignoring empty pin current: Ix(u2:2)
+Ignoring empty pin current: Ix(u3:1)
+Ignoring empty pin current: Ix(u3:2)
+Ignoring empty pin current: Ix(u4:1)
+Ignoring empty pin current: Ix(u4:2)
+Ignoring empty pin current: Ix(u5:1)
+Ignoring empty pin current: Ix(u5:2)
+
+Date: Tue Apr 07 19:11:40 2020
+Total elapsed time: 0.338 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 48387
+traniter = 46825
+tranpoints = 13859
+accept = 10552
+rejected = 3307
+matrix size = 58
+fillins = 28
+solver = Normal
+Matrix Compiler1: 3.18 KB object code size  0.6/0.3/[0.2]
+Matrix Compiler2: 4.99 KB object code size  1.2/0.5/[0.3]
+

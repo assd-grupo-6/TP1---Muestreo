@@ -226,6 +226,7 @@ class Application(QtWidgets.QMainWindow, design.Ui_MainWindow):
             spectrum = self.get_spectrum(self.recov_filt_node)
             self.freq_axes.plot(spectrum["f"], spectrum["psd"], label='Recovery Filter Signal')
             # self.freq_axes.semilogx(spectrum["f"], spectrum["psd"], label='Recovery Filter Signal')
+        self.freq_axes.set_xlim(0, 100e3)
         # TODO: for AM freq plot
         if self.XcWaveform_radioButton.isChecked() and self.simulation:
             fs = self.sampleRat_spinBox.value()
