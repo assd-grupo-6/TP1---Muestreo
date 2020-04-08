@@ -18,16 +18,16 @@ class InputSignal:
         if self.waveform == "sine":
             period = 1.0 / self.fc
             self.t = np.linspace(0, 4*period, 1000)
-            self.y = np.sin(2*np.pi*self.fc*self.t)
+            self.y = self.amplitude * np.sin(2*np.pi*self.fc*self.t)
         elif self.waveform == "square":
             period = 1.0 / self.fc
             self.t = np.linspace(0, 4*period, 1000)
-            self.y = signal.square(2*np.pi*self.fc*self.t, 0.5)
+            self.y = self.amplitude * signal.square(2*np.pi*self.fc*self.t, 0.5)
         elif self.waveform == "altsine":
             period = 1.5 / self.fc
             self.t = np.linspace(0, 4*period, 1000)
-            t_i = np.linspace(0, period, 100)
-            y_i = np.sin(2*np.pi*self.fc*t_i)
+            t_i = self.amplitude * np.linspace(0, period, 100)
+            y_i = self.amplitude * np.sin(2*np.pi*self.fc*t_i)
             for i in range(0, 10):
                 for element in y_i:
                     self.y.append(element)
@@ -39,7 +39,7 @@ class InputSignal:
             self.t = np.linspace(0, 4*period, 1000)
             ym = np.cos(2*np.pi*fm*self.t)
             yp = np.cos(2*np.pi*fp*self.t)
-            self.y = (m * ym + 1)*yp
+            self.y = self.amplitude * (m * ym + 1)*yp
 
     def get_signal_dict(self):
         ret_dict = dict()
